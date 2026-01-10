@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { DUMMY_NEWS } from "@/dummy-news";
+
+import { getNewsItem } from "@/lib/news";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { use } from "react";
 
-export default function NewsDetailPage(props: PageProps<"/news/[slug]">) {
-  const { slug } = use(props.params);
+export default async function NewsDetailPage(props: PageProps<"/news/[slug]">) {
+  const { slug } = await props.params;
 
-  const newsItem = DUMMY_NEWS.find((item) => item.slug === slug);
+  const newsItem = await getNewsItem(slug);
 
   if (!newsItem) notFound();
 

@@ -6,26 +6,25 @@ import {
   getNewsForYearAndMonth,
 } from "@/lib/news";
 import Link from "next/link";
-import { use } from "react";
 
-export default function FilteredNewsPage(props: {
+export default async function FilteredNewsPage(props: {
   params: Promise<{ filter?: string[] }>;
 }) {
-  const { filter } = use(props.params);
+  const { filter } = await props.params;
 
   const selectedYear = filter?.[0];
   const selectedMonth = filter?.[1];
 
   let news;
-  let links = getAvailableNewsYears();
+  let links = await getAvailableNewsYears();
 
   if (selectedYear && !selectedMonth) {
-    news = getNewsForYear(+selectedYear);
-    links = getAvailableNewsMonths(+selectedYear);
+    news = await getNewsForYear(selectedYear);
+    links = await getAvailableNewsMonths(selectedYear);
   }
 
   if (selectedYear && selectedMonth) {
-    news = getNewsForYearAndMonth(+selectedYear, +selectedMonth);
+    news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
     links = [];
   }
 
@@ -35,11 +34,13 @@ export default function FilteredNewsPage(props: {
     newsContent = <NewsList news={news} />;
   }
 
+  const availableYears = await getAvailableNewsYears();
+
   if (
-    (selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
+    (selectedYear && !availableYears.includes(selectedYear)) ||
     (selectedYear &&
       selectedMonth &&
-      !getAvailableNewsMonths(+selectedYear).includes(+selectedMonth))
+      !getAvailableNewsMonths(selectedYear).includes(selectedMonth))
   ) {
     throw new Error("Invalid filter");
   }

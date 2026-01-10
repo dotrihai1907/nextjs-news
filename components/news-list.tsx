@@ -1,14 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { News } from "@/types";
 import Link from "next/link";
-
-type News = {
-  id: string;
-  slug: string;
-  title: string;
-  image: string;
-  date: string;
-  content: string;
-};
 
 export default function NewsList({ news }: { news: News[] }) {
   return (
