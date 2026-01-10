@@ -11,7 +11,7 @@ type News = {
 };
 
 export default async function NewsPage() {
-  const news = getAllNews() as News[];
+  const news = (await getAllNews()) as News[];
 
   return (
     <>
